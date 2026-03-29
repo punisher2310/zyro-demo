@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Zyro Experience</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  font-family:'Inter',sans-serif;
+  background:#0a0a0a;
+  color:white;
+  overflow-x:hidden;
+}
+
+h1,h2{
+  font-family:'Playfair Display',serif;
+}
+
+/* HERO */
+.hero{
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  text-align:center;
+  background:radial-gradient(circle,#1a1a1a,#000);
+}
+
+.hero h1{
+  font-size:52px;
+  letter-spacing:1px;
+}
+
+/* BUTTON */
+.btn{
+  margin-top:20px;
+  padding:12px 30px;
+  border:none;
+  border-radius:30px;
+  background:white;
+  color:black;
+  cursor:pointer;
+}
+
+/* SECTION */
+.section{
+  padding:100px 20px;
+  max-width:1000px;
+  margin:auto;
+  text-align:center;
+}
+
+/* STORY */
+.story{
+  font-size:18px;
+  line-height:1.6;
+  opacity:0.8;
+}
+
+/* GALLERY */
+.gallery{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+.gallery img{
+  width:260px;
+  margin:10px;
+  border-radius:20px;
+  transition:0.4s;
+}
+.gallery:hover img{
+  opacity:0.3;
+}
+.gallery img:hover{
+  opacity:1;
+  transform:scale(1.2);
+}
+
+/* MENU */
+.menu{
+  text-align:left;
+}
+.menu-item{
+  display:flex;
+  justify-content:space-between;
+  padding:15px 0;
+  border-bottom:1px solid #333;
+  transition:0.3s;
+}
+.menu-item:hover{
+  transform:translateX(10px);
+}
+
+/* REVEAL */
+.reveal{
+  opacity:0;
+  transform:translateY(40px);
+  transition:0.8s;
+}
+.reveal.show{
+  opacity:1;
+  transform:translateY(0);
+}
+</style>
+</head>
+
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Zyro Coffee Experience</h1>
+  <p>Not just coffee — a feeling</p>
+  <button class="btn">Explore</button>
+</div>
+
+<!-- STORY -->
+<div class="section reveal">
+  <h2>Our Philosophy</h2>
+  <p class="story">
+    Every cup we serve is crafted to create a moment.
+    A space where conversations flow, and memories stay.
+  </p>
+</div>
+
+<!-- GALLERY -->
+<div class="section gallery reveal">
+  <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93">
+  <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348">
+  <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085">
+</div>
+
+<!-- MENU -->
+<div class="section menu reveal">
+  <h2>Signature Menu</h2>
+
+  <div class="menu-item">
+    <span>Cappuccino</span>
+    <span>₹120</span>
+  </div>
+
+  <div class="menu-item">
+    <span>Latte</span>
+    <span>₹140</span>
+  </div>
+
+  <div class="menu-item">
+    <span>Mocha</span>
+    <span>₹160</span>
+  </div>
+
+</div>
+
+<script>
+window.addEventListener('scroll',()=>{
+  document.querySelectorAll('.reveal').forEach(el=>{
+    if(el.getBoundingClientRect().top < window.innerHeight-100){
+      el.classList.add('show')
+    }
+  })
+});
+</script>
+
+</body>
+</html>
