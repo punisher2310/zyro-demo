@@ -1,287 +1,86 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+import React from "react";
+import { motion } from "framer-motion";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Menu, MapPin, Phone, Instagram } from "lucide-react";
 
-<title>Zyro Premium Cafe</title>
+export default function CafeWebsite() {
+  return (
+    <div className="w-full min-h-screen bg-black text-white overflow-x-hidden">
+      {/* NAVBAR */}
+      <div className="fixed top-4 left-4 z-50">
+        <Menu size={32} />
+      </div>
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+      {/* HERO SECTION */}
+      <div className="relative h-screen flex items-center justify-center">
+        <video
+          autoPlay
+          loop
+          muted
+          className="absolute w-full h-full object-cover opacity-60"
+          src="https://videos.pexels.com/video-files/855564/855564-hd_1920_1080_25fps.mp4"
+        />
 
-<style>
-body{
-  margin:0;
-  font-family:'Inter',sans-serif;
-  background:linear-gradient(135deg,#0b0c10,#111827);
-  color:white;
+        <motion.h1
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+          className="text-4xl md:text-6xl font-bold text-center z-10"
+        >
+          Experience Coffee Like Never Before ☕
+        </motion.h1>
+      </div>
+
+      {/* OWNER MESSAGE */}
+      <div className="p-10 text-center">
+        <h2 className="text-3xl font-semibold mb-4">A Message From Our Cafe</h2>
+        <p className="max-w-2xl mx-auto text-gray-300">
+          At our cafe, we believe coffee is not just a drink, it’s an experience.
+          Every cup we serve is crafted with passion, warmth, and a touch of love.
+          Whether you're here to relax, work, or connect — you are always family.
+        </p>
+      </div>
+
+      {/* SPECIAL DISHES (AUTO SCROLL) */}
+      <div className="overflow-hidden py-10">
+        <motion.div
+          animate={{ x: ["0%", "-100%"] }}
+          transition={{ repeat: Infinity, duration: 15, ease: "linear" }}
+          className="flex gap-6 w-max"
+        >
+          {["Kulhad Pizza", "Biscoff Shake", "Cappuccino", "Mojito", "Cheese Burst Pizza"].map((item, index) => (
+            <Card key={index} className="min-w-[250px] bg-zinc-900 text-white">
+              <CardContent className="p-6 text-center">{item}</CardContent>
+            </Card>
+          ))}
+        </motion.div>
+      </div>
+
+      {/* REVIEWS */}
+      <div className="p-10">
+        <h2 className="text-3xl text-center mb-6">Customer Reviews</h2>
+        <div className="grid md:grid-cols-3 gap-6">
+          {[
+            "Best cafe in town!",
+            "Amazing coffee and vibes!",
+            "Loved the ambiance.",
+            "Great service!",
+            "Highly recommended!"
+          ].map((review, i) => (
+            <Card key={i} className="bg-zinc-900">
+              <CardContent className="p-4">⭐ {review}</CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+
+      {/* FLOATING BUTTONS */}
+      <div className="fixed bottom-5 right-5 flex flex-col gap-4">
+        <Button className="rounded-full"><Instagram /></Button>
+        <Button className="rounded-full"><MapPin /></Button>
+        <Button className="rounded-full"><Phone /></Button>
+      </div>
+    </div>
+  );
 }
-
-/* LOADER */
-#loader{
-  position:fixed;
-  inset:0;
-  background:black;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  z-index:9999;
-}
-#loader video{
-  width:280px;
-  border-radius:20px;
-  opacity:0.85;
-}
-
-/* NAV */
-.nav{
-  position:fixed;
-  top:20px;
-  left:20px;
-  font-size:28px;
-  cursor:pointer;
-  z-index:1000;
-}
-.menu{
-  position:fixed;
-  top:0;
-  left:-300px;
-  width:260px;
-  height:100%;
-  background:rgba(0,0,0,0.95);
-  padding:40px;
-  transition:0.4s;
-}
-.menu.show{left:0;}
-.menu a{
-  display:block;
-  margin:20px 0;
-  text-decoration:none;
-  color:white;
-}
-
-/* HERO */
-.hero{
-  height:100vh;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
-}
-.hero h1{
-  font-family:'Playfair Display';
-  font-size:58px;
-  background:linear-gradient(90deg,#fff,#c084fc,#22d3ee);
-  -webkit-background-clip:text;
-  color:transparent;
-}
-
-/* BUTTON */
-.btn{
-  margin-top:20px;
-  padding:12px 28px;
-  border-radius:30px;
-  border:none;
-  background:white;
-  color:black;
-  cursor:pointer;
-}
-
-/* GLASS */
-.glass{
-  margin:80px auto;
-  max-width:1100px;
-  padding:40px;
-  border-radius:20px;
-  background:rgba(255,255,255,0.05);
-  backdrop-filter:blur(20px);
-}
-
-/* GALLERY */
-.gallery{
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-}
-.gallery img{
-  width:240px;
-  margin:10px;
-  border-radius:15px;
-  transition:0.4s;
-}
-.gallery:hover img{opacity:0.4;}
-.gallery img:hover{
-  transform:scale(1.2);
-  opacity:1;
-}
-
-/* MENU */
-.menu-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:20px;
-}
-.card{
-  padding:20px;
-  border-radius:15px;
-  background:rgba(255,255,255,0.05);
-}
-
-/* REVIEWS */
-.reviews{
-  overflow:hidden;
-  white-space:nowrap;
-}
-.reviews span{
-  display:inline-block;
-  padding:0 30px;
-  animation:scroll 15s linear infinite;
-}
-@keyframes scroll{
-  from{transform:translateX(100%)}
-  to{transform:translateX(-100%)}
-}
-
-/* FLOAT */
-.float{
-  position:fixed;
-  bottom:20px;
-  right:20px;
-}
-.float a{
-  display:block;
-  margin:10px;
-  padding:14px;
-  border-radius:50%;
-  background:white;
-  color:black;
-  text-decoration:none;
-}
-
-/* POPUP */
-.popup{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.8);
-  display:none;
-  justify-content:center;
-  align-items:center;
-}
-.popup-box{
-  background:white;
-  color:black;
-  padding:30px;
-  border-radius:20px;
-}
-.popup input{
-  display:block;
-  margin:10px 0;
-  padding:10px;
-}
-</style>
-</head>
-
-<body>
-
-<!-- LOADER -->
-<div id="loader">
-  <video autoplay muted loop>
-    <source src="https://videos.pexels.com/video-files/3240282/3240282-hd_1920_1080_25fps.mp4">
-  </video>
-  <p>Crafting your coffee...</p>
-</div>
-
-<!-- NAV -->
-<div class="nav" onclick="toggleMenu()">☰</div>
-
-<div class="menu" id="menu">
-  <a href="#">Menu</a>
-  <a href="#">Location</a>
-  <a href="#">Book Seat</a>
-  <a href="#">Timings</a>
-</div>
-
-<!-- HERO -->
-<div class="hero">
-  <h1>Zyro Coffee Experience</h1>
-  <p>Luxury. Taste. Vibe.</p>
-  <button class="btn" onclick="openBooking()">Book a Seat</button>
-</div>
-
-<!-- OWNER -->
-<div class="glass">
-<h2>From the Owner</h2>
-<p>
-At our cafe, we believe coffee is not just a drink, it’s an experience.  
-Every cup we serve is crafted to bring comfort, conversations, and moments worth remembering.
-</p>
-</div>
-
-<!-- GALLERY -->
-<div class="glass gallery">
-<img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93">
-<img src="https://images.unsplash.com/photo-1511920170033-f8396924c348">
-<img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085">
-<img src="https://images.unsplash.com/photo-1498804103079-a6351b050096">
-</div>
-
-<!-- MENU -->
-<div class="glass">
-<h2>Our Menu</h2>
-<div class="menu-grid">
-<div class="card">Cappuccino — ₹120</div>
-<div class="card">Latte — ₹140</div>
-<div class="card">Mocha — ₹160</div>
-<div class="card">Cold Coffee — ₹180</div>
-</div>
-</div>
-
-<!-- REVIEWS -->
-<div class="glass">
-<h2>Customer Reviews</h2>
-<div class="reviews">
-<span>⭐ Amazing vibe</span>
-<span>⭐ Loved it</span>
-<span>⭐ Premium feel</span>
-</div>
-</div>
-
-<!-- FLOAT -->
-<div class="float">
-<a href="tel:XXXXXXXXXX">📞</a>
-<a href="https://maps.google.com">📍</a>
-<a href="https://instagram.com">📷</a>
-</div>
-
-<!-- BOOKING POPUP -->
-<div id="bookingPopup" class="popup">
-  <div class="popup-box">
-    <h2>Reserve Your Seat</h2>
-    <input placeholder="Your Name">
-    <input placeholder="Date & Time">
-    <button onclick="fakeSubmit()">Confirm</button>
-  </div>
-</div>
-
-<script>
-function toggleMenu(){
-  document.getElementById("menu").classList.toggle("show");
-}
-
-function openBooking(){
-  document.getElementById("bookingPopup").style.display="flex";
-}
-
-function fakeSubmit(){
-  alert("Booking Confirmed ✅");
-  document.getElementById("bookingPopup").style.display="none";
-}
-
-setTimeout(()=>{
-  document.getElementById("loader").style.display="none";
-},3500);
-</script>
-
-</body>
-</html>
