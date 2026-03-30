@@ -1,86 +1,268 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Menu, MapPin, Phone, Instagram } from "lucide-react";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zyro Cafe | Premium Hospitality Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --cream: #FDF5E6; --brown: #603627; --orange: #C08261; --tan: #EAD7BB; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--cream); color: var(--brown); overflow-x: hidden; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+        
+        /* Floating Price Bubble - Pinterest Style */
+        .price-bubble {
+            position: absolute;
+            top: 45%;
+            right: -5px;
+            background: var(--orange);
+            color: white;
+            padding: 10px 18px;
+            border-radius: 50px;
+            font-weight: 800;
+            box-shadow: 0 10px 30px rgba(192, 130, 97, 0.4);
+            transform: translateY(-50%);
+            z-index: 20;
+            border: 2px solid white;
+            font-size: 0.9rem;
+        }
 
-export default function CafeWebsite() {
-  return (
-    <div className="w-full min-h-screen bg-black text-white overflow-x-hidden">
-      {/* NAVBAR */}
-      <div className="fixed top-4 left-4 z-50">
-        <Menu size={32} />
-      </div>
+        /* Horizontal Scroll for Mobile Menu */
+        .hide-scroll::-webkit-scrollbar { display: none; }
+        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
 
-      {/* HERO SECTION */}
-      <div className="relative h-screen flex items-center justify-center">
-        <video
-          autoPlay
-          loop
-          muted
-          className="absolute w-full h-full object-cover opacity-60"
-          src="https://videos.pexels.com/video-files/855564/855564-hd_1920_1080_25fps.mp4"
-        />
+        .menu-item img { transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+        .menu-item:hover img { transform: scale(1.08); }
 
-        <motion.h1
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          className="text-4xl md:text-6xl font-bold text-center z-10"
-        >
-          Experience Coffee Like Never Before ☕
-        </motion.h1>
-      </div>
+        /* Floating Action Buttons Styling */
+        .fab {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .fab:active { transform: scale(0.85); }
+    </style>
+</head>
+<body class="selection:bg-[#C08261] selection:text-white">
 
-      {/* OWNER MESSAGE */}
-      <div className="p-10 text-center">
-        <h2 className="text-3xl font-semibold mb-4">A Message From Our Cafe</h2>
-        <p className="max-w-2xl mx-auto text-gray-300">
-          At our cafe, we believe coffee is not just a drink, it’s an experience.
-          Every cup we serve is crafted with passion, warmth, and a touch of love.
-          Whether you're here to relax, work, or connect — you are always family.
-        </p>
-      </div>
-
-      {/* SPECIAL DISHES (AUTO SCROLL) */}
-      <div className="overflow-hidden py-10">
-        <motion.div
-          animate={{ x: ["0%", "-100%"] }}
-          transition={{ repeat: Infinity, duration: 15, ease: "linear" }}
-          className="flex gap-6 w-max"
-        >
-          {["Kulhad Pizza", "Biscoff Shake", "Cappuccino", "Mojito", "Cheese Burst Pizza"].map((item, index) => (
-            <Card key={index} className="min-w-[250px] bg-zinc-900 text-white">
-              <CardContent className="p-6 text-center">{item}</CardContent>
-            </Card>
-          ))}
-        </motion.div>
-      </div>
-
-      {/* REVIEWS */}
-      <div className="p-10">
-        <h2 className="text-3xl text-center mb-6">Customer Reviews</h2>
-        <div className="grid md:grid-cols-3 gap-6">
-          {[
-            "Best cafe in town!",
-            "Amazing coffee and vibes!",
-            "Loved the ambiance.",
-            "Great service!",
-            "Highly recommended!"
-          ].map((review, i) => (
-            <Card key={i} className="bg-zinc-900">
-              <CardContent className="p-4">⭐ {review}</CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
-
-      {/* FLOATING BUTTONS */}
-      <div className="fixed bottom-5 right-5 flex flex-col gap-4">
-        <Button className="rounded-full"><Instagram /></Button>
-        <Button className="rounded-full"><MapPin /></Button>
-        <Button className="rounded-full"><Phone /></Button>
-      </div>
+    <!-- Floating Action Buttons (Bottom Right) -->
+    <div class="fixed bottom-8 right-6 z-50 flex flex-col gap-4">
+        <!-- Call Button -->
+        <a href="tel:+919876543210" class="fab bg-green-600 text-white">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+        </a>
+        <!-- Instagram Button -->
+        <a href="#" class="fab bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] text-white">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+        </a>
+        <!-- Map/Location Button -->
+        <a href="#" class="fab bg-blue-600 text-white">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+        </a>
     </div>
-  );
-}
+
+    <!-- Header Navigation -->
+    <nav class="sticky top-0 z-40 bg-[#FDF5E6]/90 backdrop-blur-md px-6 py-5 flex justify-between items-center border-b border-[#603627]/5">
+        <div class="flex items-center gap-2">
+            <div class="bg-[#603627] text-white w-8 h-8 flex items-center justify-center rounded-md font-bold text-lg shadow-sm">Z</div>
+            <span class="font-serif font-bold italic text-2xl tracking-tighter">ZYRO CAFE</span>
+        </div>
+        <button onclick="toggleModal('bookingModal')" class="text-[10px] font-bold uppercase tracking-[0.2em] bg-[#603627] text-white px-6 py-2.5 rounded-full shadow-lg">Reserve</button>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative h-[65vh] flex items-center justify-center text-center px-6 overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80&w=2000" class="absolute inset-0 w-full h-full object-cover brightness-[0.45] scale-105" alt="">
+        <div class="relative max-w-2xl">
+            <p class="text-white/80 uppercase tracking-[0.5em] text-[10px] font-bold mb-4">A Digital Experience by zyro.in</p>
+            <h1 class="font-serif text-white text-5xl md:text-7xl font-bold italic leading-[1.1] mb-8 drop-shadow-2xl">The Perfect Blend <br> of Art & Taste.</h1>
+            <a href="#menu" class="inline-block bg-[#C08261] text-white px-10 py-4 rounded-full text-xs font-bold uppercase tracking-widest shadow-2xl hover:scale-105 transition-transform">Explore Full Menu</a>
+        </div>
+    </header>
+
+    <!-- Founder's Message Section -->
+    <section class="py-20 px-8 text-center bg-white/40 border-b border-[#603627]/10">
+        <div class="max-w-3xl mx-auto">
+            <div class="mb-8 relative inline-block">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200&h=200" class="w-24 h-24 rounded-full mx-auto object-cover border-4 border-[#EAD7BB] shadow-xl" alt="">
+                <div class="absolute -bottom-2 -right-2 bg-[#C08261] text-white p-2 rounded-full shadow-lg">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                </div>
+            </div>
+            <h2 class="font-serif text-4xl font-bold italic mb-6 uppercase tracking-tighter">A Personal Note</h2>
+            <p class="italic text-[#603627]/80 leading-relaxed mb-8 text-xl px-4">
+                "Hamara maksad sirf ek cafe chalana nahi, balki ek aisi jagah dena hai jahan yaadein banti hain. Zyro Cafe mein har dish aur har cup ke peeche hamari team ka passion juda hai. Aapka swagat hai!"
+            </p>
+            <div class="uppercase tracking-[0.3em] text-[11px] font-black opacity-60">
+                Rajiv Vardhan <span class="block font-normal mt-1 italic">Founder, Zyro Hospitality</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pinterest Style Menu (Horizontal Scroll) -->
+    <section id="menu" class="py-20 bg-[#FDF5E6]">
+        <div class="px-8 mb-12 flex justify-between items-end">
+            <div>
+                <h2 class="font-serif text-5xl font-bold italic uppercase tracking-tighter">Our Menu</h2>
+                <p class="text-[11px] font-bold opacity-40 uppercase tracking-[0.3em] mt-2">Crafted by Zyro</p>
+            </div>
+            <div class="hidden md:flex gap-4">
+                <span class="text-[10px] font-bold uppercase border-b-2 border-[#603627] pb-1">Brews</span>
+                <span class="text-[10px] font-bold uppercase opacity-30">Burgers</span>
+                <span class="text-[10px] font-bold uppercase opacity-30">Sides</span>
+            </div>
+        </div>
+
+        <div class="flex overflow-x-auto gap-10 px-8 pb-16 hide-scroll">
+            <!-- Product 1 -->
+            <div class="min-w-[290px] menu-item">
+                <div class="relative w-full aspect-[3/4] rounded-[2.5rem] overflow-hidden shadow-2xl mb-6">
+                    <img src="https://images.unsplash.com/photo-1541167760496-162955ed8a9f?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover" alt="">
+                    <div class="price-bubble">₹280</div>
+                </div>
+                <h4 class="font-serif text-2xl font-bold italic text-center">Zyro Iced Latte</h4>
+                <p class="text-[10px] text-center uppercase opacity-40 mt-1 font-bold tracking-widest">Arabica Special</p>
+            </div>
+            <!-- Product 2 -->
+            <div class="min-w-[290px] menu-item">
+                <div class="relative w-full aspect-[3/4] rounded-[2.5rem] overflow-hidden shadow-2xl mb-6">
+                    <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover" alt="[attachment_0](attachment)">
+                    <div class="price-bubble">₹450</div>
+                </div>
+                <h4 class="font-serif text-2xl font-bold italic text-center">Elite Umami Burger</h4>
+                <p class="text-[10px] text-center uppercase opacity-40 mt-1 font-bold tracking-widest">Handcrafted Patty</p>
+            </div>
+            <!-- Product 3 -->
+            <div class="min-w-[290px] menu-item">
+                <div class="relative w-full aspect-[3/4] rounded-[2.5rem] overflow-hidden shadow-2xl mb-6">
+                    <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover" alt="">
+                    <div class="price-bubble">₹620</div>
+                </div>
+                <h4 class="font-serif text-2xl font-bold italic text-center">Stone Baked Pizza</h4>
+                <p class="text-[10px] text-center uppercase opacity-40 mt-1 font-bold tracking-widest">Sourdough Base</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Special Foods (Dedicated Page Layout) -->
+    <section class="py-20 px-8 bg-[#603627] text-[#FDF5E6]">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="font-serif text-4xl font-bold italic text-center mb-16 uppercase tracking-tighter">Chef's Signature Specials</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div class="group relative rounded-3xl overflow-hidden h-[450px]">
+                    <img src="https://images.unsplash.com/photo-1544148103-0773bf10d330?auto=format&fit=crop&q=80&w=1000" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" alt="">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-8">
+                        <span class="text-[10px] font-bold uppercase tracking-[0.4em] mb-2 text-[#C08261]">Limited Edition</span>
+                        <h3 class="font-serif text-3xl font-bold italic mb-2">Honey Glazed Roast</h3>
+                        <p class="text-sm opacity-70 italic mb-4">Roasted with secret wild-honey and rosemary.</p>
+                        <span class="text-2xl font-bold">₹1,200</span>
+                    </div>
+                </div>
+                <div class="group relative rounded-3xl overflow-hidden h-[450px]">
+                    <img src="https://images.unsplash.com/photo-1476124369491-e7addf5db371?auto=format&fit=crop&q=80&w=1000" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" alt="">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-8">
+                        <span class="text-[10px] font-bold uppercase tracking-[0.4em] mb-2 text-[#C08261]">Artisan Pasta</span>
+                        <h3 class="font-serif text-3xl font-bold italic mb-2">Truffle Cream Penne</h3>
+                        <p class="text-sm opacity-70 italic mb-4">Handmade pasta with authentic Italian truffles.</p>
+                        <span class="text-2xl font-bold">₹850</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interior/Exterior Photos Section -->
+    <section class="py-24 px-8 bg-white/20">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="font-serif text-4xl font-bold italic text-center mb-16 uppercase tracking-tighter">The Ambiance</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&q=80" class="rounded-2xl h-64 w-full object-cover shadow-lg" alt="">
+                <img src="https://images.unsplash.com/photo-1559925393-8be0ec41b50d?auto=format&fit=crop&q=80" class="rounded-2xl h-64 w-full object-cover shadow-lg mt-10" alt="">
+                <img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&q=80" class="rounded-2xl h-64 w-full object-cover shadow-lg" alt="">
+                <img src="https://images.unsplash.com/photo-1445116572660-236099ec97a0?auto=format&fit=crop&q=80" class="rounded-2xl h-64 w-full object-cover shadow-lg mt-10" alt="">
+            </div>
+        </div>
+    </section>
+
+    <!-- Detailed Footer (Important Things) -->
+    <footer class="bg-white py-24 px-8 border-t border-[#603627]/10">
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-16">
+            <div class="md:col-span-2">
+                <div class="flex items-center gap-2 mb-8">
+                    <div class="bg-[#603627] text-white w-10 h-10 flex items-center justify-center rounded-lg font-bold text-xl shadow-md">Z</div>
+                    <span class="font-serif font-black italic text-3xl tracking-tighter">ZYRO CAFE</span>
+                </div>
+                <p class="text-[#603627]/60 italic leading-relaxed max-w-sm mb-10 text-lg">
+                    Premium hospitality design showcased by **zyro.in**. Crafted for clients who value aesthetic excellence.
+                </p>
+                <div class="flex gap-4">
+                    <div class="w-12 h-12 border border-[#603627]/10 rounded-full flex items-center justify-center hover:bg-[#603627] hover:text-white transition-all cursor-pointer"><svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.332 3.608 1.308.975.975 1.245 2.242 1.308 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.063 1.366-.333 2.633-1.308 3.608-.975.975-2.242 1.245-3.608 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.063-2.633-.333-3.608-1.308-.975-.975-1.245-2.242-1.308-3.608-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.062-1.366.332-2.633 1.308-3.608.975-.975 2.242-1.245 3.608-1.308 1.266-.058 1.646-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-1.312.06-2.208.267-2.992.572-.81.315-1.496.736-2.178 1.418-.682.682-1.103 1.368-1.418 2.178-.305.784-.512 1.68-.572 2.992-.058 1.28-.072 1.688-.072 4.947s.014 3.667.072 4.947c.06 1.312.267 2.208.572 2.992.315.81.736 1.496 1.418 2.178.682.682 1.368 1.103 2.178 1.418.784.305 1.68.512 2.992.572 1.28.058 1.688.072 4.947.072s3.667-.014 4.947-.072c1.312-.06 2.208-.267 2.992-.572.81-.315 1.496-.736 2.178-1.418.682-.682 1.103-1.368 1.418-2.178.305-.784.512-1.68.572-2.992.058-1.28.072-1.688.072-4.947s-.014-3.667-.072-4.947c-.06-1.312-.267-2.208-.572-2.992-.315-.81-.736-1.496-1.418-2.178-.682-.682-1.368-1.103-2.178-1.418-.784-.305-1.68-.512-2.992-.572-1.28-.058-1.688-.072-4.947-.072z"/><path d="M12 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.791-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.209-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.44-.645 1.44-1.44s-.645-1.44-1.44-1.44z"/></svg></div>
+                </div>
+            </div>
+            <div>
+                <h5 class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#C08261] mb-10">Timings</h5>
+                <ul class="italic space-y-4 text-sm">
+                    <li class="flex justify-between border-b border-[#603627]/5 pb-2"><span>Mon - Thu</span> <span class="font-bold">07 AM - 05 PM</span></li>
+                    <li class="flex justify-between border-b border-[#603627]/5 pb-2"><span>Fri - Sat</span> <span class="font-bold text-[#C08261]">07 AM - 09 PM</span></li>
+                    <li class="flex justify-between pb-2"><span>Sunday</span> <span class="font-bold">09 AM - 03 PM</span></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#C08261] mb-10">Visit Us</h5>
+                <p class="text-sm italic leading-loose">
+                    12 Elite Square, South Ex II,<br />
+                    New Delhi, 110049<br />
+                    <span class="font-bold mt-4 block">+91 98765 43210</span>
+                    <span class="opacity-40 block text-xs mt-1 underline">hello@zyro.in</span>
+                </p>
+            </div>
+        </div>
+        <div class="mt-24 pt-12 border-t border-[#603627]/5 text-center">
+            <p class="text-[10px] uppercase tracking-[0.5em] font-bold opacity-30 italic">© 2026 Zyro Cafe • Premium Hospitality Experience</p>
+            <p class="text-[10px] uppercase tracking-[0.2em] font-black italic mt-4">
+                Designed & Developed by <a href="https://zyro.in" class="text-[#603627] hover:text-[#C08261] transition-colors underline decoration-[#C08261]/30">zyro.in</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Modal for Booking -->
+    <div id="bookingModal" class="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md hidden items-center justify-center p-4">
+        <div class="bg-[#FDF5E6] w-full max-w-lg rounded-[3rem] p-12 relative shadow-2xl border border-[#603627]/5">
+            <button onclick="toggleModal('bookingModal')" class="absolute top-10 right-10 text-[#603627] text-2xl font-bold">×</button>
+            <div class="text-center mb-10">
+                <div class="bg-[#603627] text-white w-10 h-10 flex items-center justify-center rounded-lg font-bold text-xl mx-auto mb-4">Z</div>
+                <h3 class="font-serif text-3xl font-bold italic uppercase tracking-tighter">Reserve Table</h3>
+                <p class="text-[10px] uppercase tracking-[0.3em] opacity-40 mt-2">Elite Experience at Zyro Cafe</p>
+            </div>
+            <form class="space-y-6" onsubmit="event.preventDefault(); alert('Booking Requested! Team Zyro will call you shortly.'); toggleModal('bookingModal');">
+                <input type="text" placeholder="Full Name" class="w-full bg-white/50 border-b border-[#603627]/20 p-4 focus:outline-none focus:border-[#C08261] italic transition-colors">
+                <div class="grid grid-cols-2 gap-6">
+                    <input type="date" class="w-full bg-white/50 border-b border-[#603627]/20 p-4 focus:outline-none italic">
+                    <input type="time" class="w-full bg-white/50 border-b border-[#603627]/20 p-4 focus:outline-none italic">
+                </div>
+                <select class="w-full bg-white/50 border-b border-[#603627]/20 p-4 focus:outline-none italic">
+                    <option>2 Persons</option>
+                    <option>4 Persons</option>
+                    <option>Large Group (6+)</option>
+                </select>
+                <button class="w-full bg-[#603627] text-white py-5 rounded-2xl font-bold uppercase tracking-[0.2em] text-[10px] shadow-2xl hover:bg-[#C08261] transition-all">Request Booking</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function toggleModal(id) {
+            const modal = document.getElementById(id);
+            modal.classList.toggle('hidden');
+            modal.classList.toggle('flex');
+        }
+    </script>
+</body>
+</html>
+
