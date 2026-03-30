@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cozi Cafe | Boutique Branding</title>
+    <title>Zyro.in | Boutique Cafe Kanpur</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { 
             --olive: #4D694E; 
@@ -24,307 +24,315 @@
         }
         .font-seasons { font-family: 'Playfair Display', serif; }
         
-        /* Side Menu Transition */
+        /* Full Screen Menu Logic */
         #sideMenu {
-            transition: transform 0.6s cubic-bezier(0.85, 0, 0.15, 1);
-            transform: translateX(-100%);
-            z-index: 100;
+            position: fixed;
+            inset: 0;
+            background-color: var(--cream);
+            z-index: 200;
+            display: none;
+            overflow-y: auto;
         }
-        #sideMenu.open { transform: translateX(0); }
+        #sideMenu.active { display: block; }
 
-        /* Hero Image Overlay */
+        /* Hero Overlay */
         .hero-section::after {
             content: "";
             position: absolute;
             inset: 0;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0.5));
+            background: rgba(0, 0, 0, 0.7);
             z-index: 1;
-        }
-
-        /* Pinterest Style Drinks */
-        .drink-img-wrapper {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 1/1;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 4px solid white;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-            margin-bottom: 12px;
-        }
-        .drink-price-badge {
-            position: absolute;
-            bottom: 5%;
-            right: 5%;
-            background: #C08261;
-            color: white;
-            padding: 6px 14px;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: 800;
-            z-index: 2;
         }
 
         /* Floating Action Buttons */
         .fab-container {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
+            bottom: 25px;
+            right: 20px;
             display: flex;
             flex-direction: column;
             gap: 12px;
-            z-index: 90;
+            z-index: 150;
         }
         .fab {
-            width: 50px;
-            height: 50px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             background: var(--olive);
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            transition: 0.3s;
+            text-decoration: none;
         }
-        .fab:hover { transform: scale(1.1); background: var(--dark-olive); }
+        .fab:hover { transform: scale(1.1); background: #25D366; } /* WhatsApp Green on Hover */
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--cream); }
-        ::-webkit-scrollbar-thumb { background: var(--olive); }
+        /* Auto Move Reviews */
+        .review-track {
+            display: flex;
+            gap: 20px;
+            animation: scroll 40s linear infinite;
+        }
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
 
-        /* Menu Icon Animation */
-        .menu-bar { transition: 0.3s; background-color: currentColor; }
-        .open .bar-1 { transform: translateY(8px) rotate(45deg); background-color: var(--olive) !important; }
-        .open .bar-2 { opacity: 0; }
-        .open .bar-3 { transform: translateY(-8px) rotate(-45deg); background-color: var(--olive) !important; }
+        /* Gallery Grid */
+        .gallery-img {
+            transition: 0.5s ease;
+            filter: grayscale(40%);
+        }
+        .gallery-img:hover {
+            filter: grayscale(0%);
+            transform: scale(1.03);
+        }
+
+        /* Custom Buttons */
+        .btn-luxury {
+            background-color: var(--olive);
+            color: white;
+            padding: 12px 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 10px;
+            font-weight: 900;
+            transition: 0.4s;
+        }
+        .btn-luxury:hover { background-color: var(--dark-olive); letter-spacing: 4px; }
     </style>
 </head>
 <body>
 
-    <!-- Header Navigation -->
-    <nav class="fixed top-0 w-full z-[110] px-6 py-6 flex justify-between items-center transition-all duration-300" id="mainNav">
-        <button onclick="toggleMenu()" id="menuBtn" class="flex flex-col gap-1.5 p-2 group text-white">
-            <div class="menu-bar bar-1 w-8 h-0.5"></div>
-            <div class="menu-bar bar-2 w-5 h-0.5"></div>
-            <div class="menu-bar bar-3 w-8 h-0.5"></div>
+    <!-- Top Navigation Bar -->
+    <nav class="fixed top-0 w-full z-[100] px-6 py-6 flex justify-between items-center bg-transparent transition-all duration-500" id="navbar">
+        <button onclick="openMenu()" class="p-2 text-white">
+            <i class="fa-solid fa-bars-staggered text-2xl"></i>
         </button>
-
         <div class="text-center text-white">
-            <h1 class="font-seasons text-2xl font-bold tracking-tighter uppercase mb-0.5">Cozi Cafe</h1>
-            <p class="text-[8px] font-black tracking-[0.4em] uppercase opacity-60">Zyro.in Signature</p>
+            <h1 class="font-seasons text-2xl font-bold tracking-tighter uppercase">Zyro.in</h1>
+            <p class="text-[8px] font-black tracking-[0.4em] uppercase opacity-60">Kanpur Boutique Cafe</p>
         </div>
-
-        <button onclick="document.getElementById('bookingModal').classList.remove('hidden')" class="bg-white text-black text-[10px] font-black uppercase tracking-widest px-6 py-2 rounded-full hover:bg-olive hover:text-white transition-all">Book</button>
+        <button onclick="toggleBooking()" class="text-white border border-white/40 px-6 py-2 rounded-full text-[10px] font-bold tracking-widest hover:bg-white hover:text-black transition-all">RESERVE</button>
     </nav>
 
-    <!-- Sidebar Menu Overlay (Pinterest Inspired) -->
-    <div id="sideMenu" class="fixed inset-0 bg-cream overflow-y-auto px-6 py-24">
+    <!-- Side Menu (Full Screen) -->
+    <div id="sideMenu" class="px-6 py-20">
+        <button onclick="closeMenu()" class="fixed top-8 right-8 text-olive text-3xl z-[210]">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
         <div class="max-w-5xl mx-auto">
             <div class="text-center mb-16">
-                <p class="text-[10px] font-black uppercase tracking-[0.5em] text-olive/50 mb-4">Our Exclusive Collection</p>
-                <h2 class="font-seasons text-6xl md:text-8xl italic font-bold text-olive">The Menu</h2>
+                <h2 class="font-seasons text-6xl italic font-bold text-olive">The Signature Menu</h2>
+                <p class="text-[10px] font-black uppercase tracking-[0.4em] text-olive/40 mt-4">Curated by Utkarsh</p>
             </div>
 
-            <!-- Pinterest Grid Drinks -->
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mb-20">
-                <div class="text-center">
-                    <div class="drink-img-wrapper">
-                        <img src="https://images.unsplash.com/photo-1541167760496-162955ed8a9f?q=80&w=400" class="w-full h-full object-cover">
-                        <div class="drink-price-badge">₹320</div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+                <!-- Coffee Section -->
+                <div>
+                    <h3 class="font-seasons text-3xl italic border-b border-olive/20 pb-4 mb-8 text-olive">Artisan Coffee</h3>
+                    <div class="space-y-6">
+                        <div class="flex justify-between items-end">
+                            <div><h4 class="font-bold">Iced Zebra Latte</h4><p class="text-xs opacity-50">Dark Choco & Milk Blended</p></div>
+                            <span class="font-bold text-olive">₹320</span>
+                        </div>
+                        <div class="flex justify-between items-end">
+                            <div><h4 class="font-bold">Matcha Gold Brew</h4><p class="text-xs opacity-50">Premium Japanese Matcha</p></div>
+                            <span class="font-bold text-olive">₹380</span>
+                        </div>
+                        <div class="flex justify-between items-end">
+                            <div><h4 class="font-bold">Pumpkin Spice Honey</h4><p class="text-xs opacity-50">Seasonal Warm Blend</p></div>
+                            <span class="font-bold text-olive">₹350</span>
+                        </div>
                     </div>
-                    <p class="font-seasons text-xl italic font-bold text-olive">Iced Zebra Latte</p>
                 </div>
-                <div class="text-center">
-                    <div class="drink-img-wrapper">
-                        <img src="https://images.unsplash.com/photo-1570968015849-0497e063877a?q=80&w=400" class="w-full h-full object-cover">
-                        <div class="drink-price-badge">₹350</div>
+                <!-- Food Section -->
+                <div>
+                    <h3 class="font-seasons text-3xl italic border-b border-olive/20 pb-4 mb-8 text-olive">Handcrafted Eats</h3>
+                    <div class="space-y-6">
+                        <div class="flex justify-between items-end">
+                            <div><h4 class="font-bold">Truffle Umami Burger</h4><p class="text-xs opacity-50">Wagyu Beef & Truffle Oil</p></div>
+                            <span class="font-bold text-olive">₹650</span>
+                        </div>
+                        <div class="flex justify-between items-end">
+                            <div><h4 class="font-bold">Burrata Bloom Pizza</h4><p class="text-xs opacity-50">Fresh Burrata & Basil</p></div>
+                            <span class="font-bold text-olive">₹890</span>
+                        </div>
+                        <div class="flex justify-between items-end">
+                            <div><h4 class="font-bold">Avocado Sunshine Toast</h4><p class="text-xs opacity-50">Sourdough & Poached Egg</p></div>
+                            <span class="font-bold text-olive">₹420</span>
+                        </div>
                     </div>
-                    <p class="font-seasons text-xl italic font-bold text-olive">Iced Pumpkin Honey</p>
-                </div>
-                <div class="text-center">
-                    <div class="drink-img-wrapper">
-                        <img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?q=80&w=400" class="w-full h-full object-cover">
-                        <div class="drink-price-badge">₹400</div>
-                    </div>
-                    <p class="font-seasons text-xl italic font-bold text-olive">White Choco Cream</p>
-                </div>
-                <div class="text-center">
-                    <div class="drink-img-wrapper">
-                        <img src="https://images.unsplash.com/photo-1515823064-d6e0c04616a7?q=80&w=400" class="w-full h-full object-cover">
-                        <div class="drink-price-badge">₹450</div>
-                    </div>
-                    <p class="font-seasons text-xl italic font-bold text-olive">Matcha Bloom</p>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 border-t border-olive/10 pt-16 text-olive">
-                <div>
-                    <h4 class="text-[10px] font-black uppercase tracking-widest mb-6 text-olive/40">Branding</h4>
-                    <p class="font-seasons text-2xl italic font-bold">Curated by <br>Zyro.in Designs</p>
-                </div>
-                <div>
-                    <h4 class="text-[10px] font-black uppercase tracking-widest mb-6 text-olive/40">Connect</h4>
-                    <ul class="space-y-3 text-sm font-bold uppercase tracking-widest">
-                        <li><a href="#" class="hover:text-gold">Instagram</a></li>
-                        <li><a href="#" class="hover:text-gold">Whatsapp</a></li>
-                        <li><a href="#" class="hover:text-gold">Direct Map</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-[10px] font-black uppercase tracking-widest mb-6 text-olive/40">Status</h4>
-                    <p class="italic text-sm">Abhi Open Hai. <br>Kal Subah 7 Baje Milte Hain!</p>
-                </div>
+            <div class="mt-20 text-center border-t border-olive/10 pt-12">
+                <p class="text-[10px] font-black uppercase tracking-[0.5em] text-olive/40 mb-4">Visit Us at Kanpur</p>
+                <p class="text-sm italic">Open Daily: 07:00 AM — 10:30 PM</p>
             </div>
         </div>
     </div>
 
     <!-- Hero Section -->
     <section class="hero-section h-screen relative flex items-center justify-center text-center px-6 overflow-hidden bg-black">
-        <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=2000" class="absolute inset-0 w-full h-full object-cover opacity-80" alt="Cafe Interior">
+        <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=2000" class="absolute inset-0 w-full h-full object-cover" alt="[Interior of Zyro Cafe]">
         <div class="relative z-10 text-white">
-            <p class="text-[11px] font-bold uppercase tracking-[0.7em] mb-8">Established 2024 • New Delhi</p>
-            <h1 class="font-seasons text-7xl md:text-[10rem] italic font-bold leading-[0.8] mb-12 drop-shadow-2xl">
+            <p class="text-[11px] font-bold uppercase tracking-[0.7em] mb-8">Established 2024 • Kanpur</p>
+            <h1 class="font-seasons text-6xl md:text-[9rem] italic font-bold leading-none mb-10 drop-shadow-2xl">
                 Savor <br> <span class="text-cream">Sunshine.</span>
             </h1>
-            <p class="max-w-2xl mx-auto text-lg md:text-2xl font-light italic opacity-90 mb-12">
-                "Hamare yahan coffee sirf drink nahi, ek ehsaas hai." 
-                Experience the golden hour at Cozi Cafe.
+            <p class="max-w-2xl mx-auto text-lg md:text-xl font-light italic opacity-90 mb-12">
+                "Where every cup tells a story of passion and craftsmanship."
             </p>
-            <button onclick="toggleMenu()" class="bg-cream text-olive px-14 py-6 text-[10px] font-black uppercase tracking-[0.5em] shadow-2xl hover:scale-105 transition-all">Explore Menu</button>
+            <button onclick="openMenu()" class="bg-cream text-olive px-12 py-5 text-[10px] font-black uppercase tracking-[0.4em] shadow-2xl transition-all">EXPLORE COLLECTION</button>
         </div>
     </section>
 
-    <!-- Owner Message Section -->
-    <section class="py-32 px-6 bg-cream border-y border-olive/5">
+    <!-- Message from Owner -->
+    <section class="py-32 px-6 bg-cream">
         <div class="max-w-4xl mx-auto text-center">
-            <span class="text-[10px] font-black tracking-[0.5em] uppercase text-olive/40 mb-10 block">Note from the Founder</span>
-            <h2 class="font-seasons text-4xl md:text-6xl italic font-bold text-olive mb-12">"Zyro Cafe humara ek chota sa sapna hai, jahan hum har guest ko ghar jaisa sukoon dena chahte hain. Aapka yahan aana humare liye garv ki baat hai."</h2>
+            <span class="text-[10px] font-black tracking-[0.5em] uppercase text-olive/40 mb-10 block">A Message from the Heart</span>
+            <h2 class="font-seasons text-4xl md:text-5xl italic font-bold text-olive mb-10 leading-snug">
+                "Zyro.in is more than just a cafe; it’s a sanctuary in Kanpur where we celebrate the fine art of slow living and artisan flavors."
+            </h2>
             <div class="flex flex-col items-center">
-                <div class="w-16 h-px bg-olive mb-6"></div>
-                <p class="text-[10px] font-black uppercase tracking-[0.4em] text-olive">Rajiv Vardhan, Founder</p>
+                <div class="w-16 h-px bg-olive mb-4"></div>
+                <p class="text-sm font-black uppercase tracking-[0.3em] text-olive">Utkarsh, Founder of Zyro.in</p>
             </div>
         </div>
     </section>
 
-    <!-- Food Categories -->
+    <!-- Gallery Section -->
+    <section class="py-20 px-4 bg-white">
+        <div class="text-center mb-16">
+            <h2 class="font-seasons text-5xl italic font-bold text-olive">The Gallery</h2>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <img src="https://images.unsplash.com/photo-1559925393-8be0ec41b50d?q=80&w=600" class="gallery-img w-full h-80 object-cover" alt="[Gallery Item]">
+            <img src="https://images.unsplash.com/photo-1445116572660-236099ec97a0?q=80&w=600" class="gallery-img w-full h-80 object-cover" alt="[Gallery Item]">
+            <img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?q=80&w=600" class="gallery-img w-full h-80 object-cover" alt="[Gallery Item]">
+            <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=600" class="gallery-img w-full h-80 object-cover" alt="[Gallery Item]">
+        </div>
+    </section>
+
+    <!-- Auto-Sliding Reviews -->
+    <section class="py-32 bg-cream overflow-hidden">
+        <div class="text-center mb-20">
+            <h2 class="font-seasons text-5xl italic font-bold text-olive">Guest Voices</h2>
+        </div>
+        <div class="review-track">
+            <!-- Review 1 -->
+            <div class="min-w-[300px] md:min-w-[400px] bg-white p-10 shadow-sm border border-olive/5 italic">
+                <p class="mb-6 opacity-70">"Best coffee in Kanpur! The vibe at Zyro.in is unmatched."</p>
+                <p class="text-[10px] font-bold uppercase tracking-widest text-olive">— Aryan S.</p>
+            </div>
+            <!-- Review 2 -->
+            <div class="min-w-[300px] md:min-w-[400px] bg-white p-10 shadow-sm border border-olive/5 italic">
+                <p class="mb-6 opacity-70">"Utkarsh has created a masterpiece. The burrata pizza is a must-try!"</p>
+                <p class="text-[10px] font-bold uppercase tracking-widest text-olive">— Ishita K.</p>
+            </div>
+            <!-- Review 3 -->
+            <div class="min-w-[300px] md:min-w-[400px] bg-white p-10 shadow-sm border border-olive/5 italic">
+                <p class="mb-6 opacity-70">"The aesthetic here is just elite. Perfect for my Instagram shots."</p>
+                <p class="text-[10px] font-bold uppercase tracking-widest text-olive">— Rahul M.</p>
+            </div>
+            <!-- Review 4 -->
+            <div class="min-w-[300px] md:min-w-[400px] bg-white p-10 shadow-sm border border-olive/5 italic">
+                <p class="mb-6 opacity-70">"Quality of ingredients is visible in every bite. Exceptional!"</p>
+                <p class="text-[10px] font-bold uppercase tracking-widest text-olive">— Sneha V.</p>
+            </div>
+            <!-- Duplicate for animation loop -->
+            <div class="min-w-[300px] md:min-w-[400px] bg-white p-10 shadow-sm border border-olive/5 italic">
+                <p class="mb-6 opacity-70">"Best coffee in Kanpur! The vibe at Zyro.in is unmatched."</p>
+                <p class="text-[10px] font-bold uppercase tracking-widest text-olive">— Aryan S.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feedback Section -->
     <section class="py-32 px-6 bg-white">
-        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10">
-            <div class="relative aspect-[4/5] overflow-hidden group">
-                <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=600" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
-                <div class="absolute inset-0 bg-black/30 flex items-end p-8">
-                    <h3 class="font-seasons text-3xl italic font-bold text-white">The Brunch</h3>
+        <div class="max-w-2xl mx-auto">
+            <h2 class="font-seasons text-4xl italic font-bold text-olive text-center mb-12">Share Your Thoughts</h2>
+            <form onsubmit="event.preventDefault(); alert('Thank you for sharing your thoughts with Utkarsh!');" class="space-y-8">
+                <input type="text" placeholder="YOUR NAME" class="w-full bg-transparent border-b border-olive/20 py-4 focus:outline-none focus:border-olive italic">
+                <textarea placeholder="MESSAGE TO UTKARSH" rows="3" class="w-full bg-transparent border-b border-olive/20 py-4 focus:outline-none focus:border-olive italic"></textarea>
+                <div class="text-center">
+                    <button type="submit" class="btn-luxury">Submit Feedback</button>
                 </div>
-            </div>
-            <div class="relative aspect-[4/5] overflow-hidden group">
-                <img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?q=80&w=600" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
-                <div class="absolute inset-0 bg-black/30 flex items-end p-8">
-                    <h3 class="font-seasons text-3xl italic font-bold text-white">Patisserie</h3>
-                </div>
-            </div>
-            <div class="relative aspect-[4/5] overflow-hidden group">
-                <img src="https://images.unsplash.com/photo-1507133750040-4a8f57021571?q=80&w=600" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
-                <div class="absolute inset-0 bg-black/30 flex items-end p-8">
-                    <h3 class="font-seasons text-3xl italic font-bold text-white">Artisan Coffee</h3>
-                </div>
-            </div>
+            </form>
         </div>
     </section>
 
     <!-- Footer -->
     <footer class="bg-olive text-cream py-24 px-10">
-        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-16">
-            <div class="md:col-span-1">
-                <h4 class="font-seasons text-4xl italic font-bold mb-6">Cozi Cafe</h4>
-                <p class="text-sm italic opacity-60 leading-relaxed mb-10">Ek boutique experience, jo aapki yaadon mein hamesha rahega. Powered by **Zyro.in** Branding.</p>
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-20">
+            <div>
+                <h4 class="font-seasons text-4xl italic font-bold mb-6">Zyro.in</h4>
+                <p class="text-sm italic opacity-60 leading-relaxed">Boutique hospitality experience based in Kanpur. Curating taste and sunshine daily.</p>
             </div>
             <div>
-                <h5 class="text-[10px] font-black uppercase tracking-widest mb-8 opacity-40">Location</h5>
-                <p class="text-lg italic font-bold">12 Elite Square, <br>South Extension II, <br>New Delhi</p>
+                <h5 class="text-[10px] font-black uppercase tracking-widest mb-8 opacity-40">Visit</h5>
+                <p class="text-lg italic font-bold">Model Town, Kanpur <br> Uttar Pradesh, India</p>
             </div>
             <div>
-                <h5 class="text-[10px] font-black uppercase tracking-widest mb-8 opacity-40">Contact</h5>
-                <p class="text-lg italic font-bold">+91 98765 43210 <br>hello@cozicafe.in</p>
-            </div>
-            <div>
-                <h5 class="text-[10px] font-black uppercase tracking-widest mb-8 opacity-40">Social</h5>
-                <div class="flex gap-4">
-                    <a href="#" class="w-10 h-10 rounded-full border border-cream/20 flex items-center justify-center hover:bg-cream hover:text-olive transition-all"><i data-lucide="instagram" class="w-4 h-4"></i></a>
-                    <a href="#" class="w-10 h-10 rounded-full border border-cream/20 flex items-center justify-center hover:bg-cream hover:text-olive transition-all"><i data-lucide="map-pin" class="w-4 h-4"></i></a>
-                    <a href="#" class="w-10 h-10 rounded-full border border-cream/20 flex items-center justify-center hover:bg-cream hover:text-olive transition-all"><i data-lucide="phone" class="w-4 h-4"></i></a>
-                </div>
+                <h5 class="text-[10px] font-black uppercase tracking-widest mb-8 opacity-40">Timing</h5>
+                <p class="text-sm italic mb-2">Mon - Sun: 07:00 AM - 10:30 PM</p>
+                <p class="text-sm italic">Call: +91 91xxxxxxxxxx</p>
             </div>
         </div>
-        <div class="mt-24 pt-10 border-t border-cream/10 text-center">
-            <p class="text-[9px] font-black uppercase tracking-[0.5em] opacity-30">© 2026 Cozi Cafe • Luxury Designs by Zyro.in</p>
-        </div>
+        <p class="mt-20 text-center text-[9px] font-bold uppercase tracking-[0.5em] opacity-30">© 2026 ZYRO.IN CAFE • ALL RIGHTS RESERVED</p>
     </footer>
 
     <!-- Booking Modal -->
-    <div id="bookingModal" class="fixed inset-0 z-[200] bg-olive/95 backdrop-blur-xl hidden flex items-center justify-center p-6 text-cream">
+    <div id="bookingModal" class="fixed inset-0 z-[300] bg-olive/95 backdrop-blur-xl hidden flex items-center justify-center p-6 text-cream">
         <div class="max-w-md w-full">
-            <div class="flex justify-between items-center mb-12">
-                <h2 class="font-seasons text-5xl italic font-bold">Reserve.</h2>
-                <button onclick="document.getElementById('bookingModal').classList.add('hidden')" class="text-[10px] font-black tracking-widest uppercase opacity-50 hover:opacity-100">Close</button>
-            </div>
-            <form onsubmit="event.preventDefault(); alert('Booking Confirmed!'); document.getElementById('bookingModal').classList.add('hidden');" class="space-y-8">
-                <input type="text" placeholder="NAME" class="w-full bg-transparent border-b border-cream/30 py-4 focus:outline-none focus:border-cream italic placeholder:text-cream/20">
-                <div class="grid grid-cols-2 gap-10">
-                    <input type="date" class="bg-transparent border-b border-cream/30 py-4 focus:outline-none focus:border-cream italic">
-                    <input type="time" class="bg-transparent border-b border-cream/30 py-4 focus:outline-none focus:border-cream italic">
+            <h2 class="font-seasons text-5xl italic font-bold mb-10 text-center">Reserve Table</h2>
+            <form class="space-y-6" onsubmit="event.preventDefault(); alert('Booking Requested.'); toggleBooking();">
+                <input type="text" placeholder="FULL NAME" class="w-full bg-transparent border-b border-cream/30 py-3 focus:outline-none focus:border-cream italic">
+                <div class="grid grid-cols-2 gap-6">
+                    <input type="date" class="bg-transparent border-b border-cream/30 py-3 text-cream focus:outline-none">
+                    <input type="time" class="bg-transparent border-b border-cream/30 py-3 text-cream focus:outline-none">
                 </div>
-                <button class="w-full bg-cream text-olive py-6 text-[10px] font-black uppercase tracking-[0.4em]">Confirm Table</button>
+                <button class="w-full bg-cream text-olive py-4 font-black text-[10px] uppercase tracking-widest mt-6">Confirm Request</button>
+                <button type="button" onclick="toggleBooking()" class="w-full text-[9px] uppercase tracking-widest opacity-60 mt-4">Close [X]</button>
             </form>
         </div>
     </div>
 
     <!-- Floating Action Buttons -->
     <div class="fab-container">
-        <a href="https://instagram.com" class="fab"><i data-lucide="instagram" class="w-5 h-5"></i></a>
-        <a href="https://maps.google.com" class="fab"><i data-lucide="map-pin" class="w-5 h-5"></i></a>
-        <a href="tel:+919876543210" class="fab"><i data-lucide="phone" class="w-5 h-5"></i></a>
+        <a href="https://wa.me/91xxxxxxxxxx" target="_blank" class="fab"><i class="fa-brands fa-whatsapp text-xl"></i></a>
+        <a href="https://instagram.com/zyro.in" target="_blank" class="fab"><i class="fa-brands fa-instagram text-xl"></i></a>
+        <a href="https://maps.google.com" target="_blank" class="fab"><i class="fa-solid fa-map-location-dot text-lg"></i></a>
+        <a href="tel:+91xxxxxxxxxx" class="fab"><i class="fa-solid fa-phone text-lg"></i></a>
     </div>
 
     <script>
-        // Initialize Icons
-        lucide.createIcons();
-
-        // Toggle Menu Functionality
-        function toggleMenu() {
-            const menu = document.getElementById('sideMenu');
-            const menuBtn = document.getElementById('menuBtn');
-            const nav = document.getElementById('mainNav');
-            
-            menu.classList.toggle('open');
-            menuBtn.classList.toggle('open');
-            
-            if (menu.classList.contains('open')) {
-                document.body.style.overflow = 'hidden';
-                menuBtn.classList.remove('text-white');
-                menuBtn.classList.add('text-olive');
-                nav.classList.add('opacity-0'); // Smooth hide nav bar items except button
-                nav.style.pointerEvents = 'none';
-                menuBtn.style.pointerEvents = 'auto'; // Keep button clickable
-                menuBtn.style.position = 'fixed';
-                menuBtn.style.zIndex = '110';
-            } else {
-                document.body.style.overflow = 'auto';
-                menuBtn.classList.add('text-white');
-                menuBtn.classList.remove('text-olive');
-                nav.classList.remove('opacity-0');
-                nav.style.pointerEvents = 'auto';
-            }
+        function openMenu() {
+            document.getElementById('sideMenu').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeMenu() {
+            document.getElementById('sideMenu').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+        function toggleBooking() {
+            const modal = document.getElementById('bookingModal');
+            modal.classList.toggle('hidden');
+            document.body.style.overflow = modal.classList.contains('hidden') ? 'auto' : 'hidden';
         }
 
-        // Scroll Effect for Navbar
+        // Change Navbar Background on Scroll
         window.addEventListener('scroll', () => {
-            const nav = document.getElementById('mainNav');
+            const nav = document.getElementById('navbar');
             if (window.scrollY > 50) {
-                nav.classList.add('bg-olive/90', 'backdrop-blur-md', 'py-4');
+                nav.classList.add('bg-olive/95', 'backdrop-blur-md', 'py-4');
                 nav.classList.remove('py-6');
             } else {
-                nav.classList.remove('bg-olive/90', 'backdrop-blur-md', 'py-4');
+                nav.classList.remove('bg-olive/95', 'backdrop-blur-md', 'py-4');
                 nav.classList.add('py-6');
             }
         });
